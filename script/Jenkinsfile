@@ -5,23 +5,22 @@ pipeline {
     }
     
     stages {
-        stage('sonar-scan') {
+        stage('SonarQube Scan') {
             steps {
                 withSonarQubeEnv('sonarQube') {
                     sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=simonabeka89_Geo-app'
                 }
             }
         }
-        stage('maven1') {
+        stage('Maven Build') {
             steps {
                 sh "mvn clean validate compile install test package"
             }
         }
-        stage('upload artifact') {
+        stage('Upload Artifact') {
             steps {
                 sh '''
-                    curl -u admin:AP8gcgmmset5jeYChTJYDN6XmDd -T \
-                    target/bio*.jar "http://ec2-54-162-86-48.compute-1.amazonaws.com:8081/artifactory/geolocation/geo/bio_${BUILD_ID}.jar"
+                    curl -u admin:AP8gcgmmset5jeYChTJYDN6XmDd -T target/bio*.jar "http://ec2-54-162-86-48.compute-1.amazonaws.com:8081/artifactory/geolocation/geo/bio_${BUILD_ID}.jar"
                 '''
             }
         }
