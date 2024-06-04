@@ -34,7 +34,7 @@ pipeline {
             steps {
                 // Uploading the built artifact to Artifactory repository
                 sh '''
-                    curl -u admin:AP8gcgmmset5jeYChTJYDN6XmDd -T target/bio*.jar "http://ec2-54-162-86-48.compute-1.amazonaws.com:8081/artifactory/geolocation/geo/bio_${BUILD_ID}.jar"
+                    curl -u admin:AP8gcgmmset5jeYChTJYDN6XmDd -T target/bio*.jar "http://ec2-54-162-86-48.compute-1.amazonaws.com:8081/artifactory/geolocation/geo/http://ec2-35-174-184-45.compute-1.amazonaws.com:8081/artifactory/geolocation/geo/bio_4.jar_${BUILD_ID}.jar"
                 '''
             }
         }
