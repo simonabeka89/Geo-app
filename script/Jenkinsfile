@@ -16,7 +16,7 @@ pipeline {
                 }
             }
         }
-        stage('Maven Build and Test') {
+        stage('Maven Build and Test1') {
             steps {
                 // Running Maven build lifecycle phases including clean, validate, compile, install, test, and package
                 sh "mvn clean validate compile install test package"
