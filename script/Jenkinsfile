@@ -18,13 +18,6 @@ pipeline {
                 sh "mvn clean validate compile install test package"
             }
         }
-        stage('ECR Login') {
-            steps {
-                withCredentials([string(credentialsId: 'aws-ecr-credentials', variable: 'AWS_ECR_CREDENTIALS')]) {
-                    sh 'aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 851725277659.dkr.ecr.us-east-1.amazonaws.com'
-                }
-            }
-        }
         stage('Upload Artifact to Artifactory') {
             steps {
                 sh '''
