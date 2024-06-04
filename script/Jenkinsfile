@@ -1,30 +1,42 @@
 pipeline {
     agent any 
+    
     tools {
+        // Assuming 'M2_HOME' is configured as a Maven installation in Jenkins Global Tool Configuration
         maven 'M2_HOME'
     }
     
     stages {
         stage('SonarQube Scan') {
             steps {
+                // Using 'withSonarQubeEnv' to set up SonarQube environment
                 withSonarQubeEnv('sonarQube') {
+                    // Running SonarQube scan using SonarQube Scanner for Maven
                     sh 'mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=simonabeka89_Geo-app'
                 }
             }
         }
-        stage('Maven Build1') {
+        stage('Maven Build and Test') {
             steps {
+                // Running Maven build lifecycle phases including clean, validate, compile, install, test, and package
                 sh "mvn clean validate compile install test package"
             }
         }
-        stage('Upload Artifact') {
+        stage('ECR Login') {
             steps {
+                // Logging into Amazon ECR
+                withCredentials([string(credentialsId: 'aws-ecr-credentials', variable: 'AWS_ECR_CREDENTIALS')]) {
+                    sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 851725277659.dkr.ecr.us-east-1.amazonaws.com"
+                }
+            }
+        }
+        stage('Upload Artifact to Artifactory') {
+            steps {
+                // Uploading the built artifact to Artifactory repository
                 sh '''
                     curl -u admin:AP8gcgmmset5jeYChTJYDN6XmDd -T target/bio*.jar "http://ec2-54-162-86-48.compute-1.amazonaws.com:8081/artifactory/geolocation/geo/bio_${BUILD_ID}.jar"
                 '''
             }
         }
-    }
-   
     }
 }
