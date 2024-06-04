@@ -26,7 +26,7 @@ pipeline {
             steps {
                 // Logging into Amazon ECR
                 withCredentials([string(credentialsId: 'aws-ecr-credentials', variable: 'AWS_ECR_CREDENTIALS')]) {
-                    sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 851725277659.dkr.ecr.us-east-1.amazonaws.com"
+                    sh "(Get-ECRLoginCommand).Password | docker login --username AWS --password-stdin 851725277659.dkr.ecr.us-east-1.amazonaws.com"
                 }
             }
         }
