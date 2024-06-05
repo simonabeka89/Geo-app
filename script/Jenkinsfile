@@ -6,10 +6,13 @@ pipeline {
     }
     
     stages {
-        stage('sonarQube Scan') {
+        stage('SonarQube Scan') {
             steps {
-                withSonarQubeEnv('sonarQube') {
-                    sh ('mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=simonabeka89_Geo-app')
+                script {
+                    // Set SonarQube project key and organization
+                    def scannerHome = tool 'SonarQubeScanner'
+                    withSonarQubeEnv('sonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=simonabeka89_Geo-app -Dsonar.organization=simonabeka_Geo-app"
                 }
             }
         }
